@@ -4,7 +4,7 @@ import javax.swing.*;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGraphModel;
 
-public class PopUpAggiungiVerticeSottogruppo extends Azioni {
+public class PopUpAggiungiVerticeSottogruppo extends Finestra {
 	
 	PopUpAggiungiVerticeSottogruppo()
 	{

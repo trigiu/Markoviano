@@ -3,6 +3,7 @@ package GuiApplicazione;
 import java.awt.*;
 import java.awt.event.*;
 
+import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JCheckBoxMenuItem;
@@ -16,17 +17,52 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.JFrame;
 
+import com.mxgraph.model.mxCell;
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.view.mxGraph;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
 
 public class Finestra extends JFrame {
+	
+	static Finestra frame;
+	protected static mxGraph graph = new mxGraph();
+	protected static HashMap m = new HashMap();
+	protected static mxGraphComponent graphComponent;
+	private static JButton bottoneAggiungiVertice;
+	private static JButton bottoneAggiungiVerticeSottogruppo;
+	private static JButton bottoneElimina;
+	private static JButton bottoneAggiungiArco;
+	private static JButton bottoneAggiungiArcoIndotto;
+	private static JButton bottoneZoomIn;
+	private static JButton bottoneZoomOut;
+	protected static Object cell;
+	private int larghezzaFrame, altezzaFrame;
+	
+	public static HashMap getM() {
+		return m;
+	}
 
+	public static mxGraph getGraph() {
+		return graph;
+	}
      
     public Finestra() {
 
          
-        setTitle("Menu Example");
-        setSize(500, 500);
+        setTitle("Catene di Markov");
+        
+        Toolkit mioToolkit = Toolkit.getDefaultToolkit();
+		Dimension dimensioniSchermo = mioToolkit.getScreenSize();
+		
+		larghezzaFrame = (int) (dimensioniSchermo.getWidth());
+		altezzaFrame = (int) (dimensioniSchermo.getHeight());
+        
+        setSize(larghezzaFrame, altezzaFrame);
          
         // Creates a menubar for a JFrame
         JMenuBar menuBar = new JMenuBar();
@@ -81,30 +117,161 @@ public class Finestra extends JFrame {
             }
         });
     }
-    public static void main(String[] args) {
-        Finestra me = new Finestra();
-        JPanel panel_sx = new JPanel();
-        panel_sx.setSize((me.getWidth())/3, me.getHeight());
+    
+    private void panelSx()
+    {
+    	JPanel panel_sx = new JPanel();
+        panel_sx.setSize((frame.getWidth())/3, frame.getHeight());
         panel_sx.setBackground(Color.BLUE);
-        Dimension dim = new Dimension(me.getWidth()/3,me.getHeight());
+        Dimension dim = new Dimension(frame.getWidth()/3,frame.getHeight());
         panel_sx.setPreferredSize(dim);
-        me.getContentPane().add(panel_sx, BorderLayout.WEST);
-
-        JPanel panel_dx = new JPanel();
+        frame.getContentPane().add(panel_sx, BorderLayout.WEST);
+    }
+    
+    void panelDx() {
+    	JPanel panel_dx = new JPanel();
+    	graph.setAllowLoops(true);
+		
+		graphComponent = new mxGraphComponent(graph);
+		graphComponent.setConnectable(false);
+		graphComponent.getGraphHandler().setRemoveCellsFromParent(false);
+		graphComponent.setPreferredSize(new Dimension(870, 580));
+		
+        panel_dx.setLayout(new FlowLayout(FlowLayout.LEFT));
         
-        /* Dovremmo inserire La finestra che io creo tramite Azioni.java all' interno del panel
-         * L' errore è di tipo adding a window to a container
-         */
-        Azioni a = new Azioni();
-        panel_dx.add(a);
-        a.setVisible(true);
+        ImageIcon vertice = new ImageIcon("Risorse/vertice.png");
+        bottoneAggiungiVertice = new JButton(vertice);
+        frame.getContentPane().add(bottoneAggiungiVertice);
+        bottoneAggiungiVertice.addActionListener(new ActionListener() {
+                        
+            public void actionPerformed(ActionEvent e) {
+            	PopUpAggiungiVertice add = new PopUpAggiungiVertice();
+            }
+        });
+        panel_dx.add(bottoneAggiungiVertice);
         
-        /* Da qua in giu è corretto */
         
-        panel_dx.setSize((me.getWidth())*2/3, me.getHeight());
-        //panel_dx.setBackground(Color.RED);
-        me.getContentPane().add(panel_dx, BorderLayout.CENTER);       
-        me.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        me.setVisible(true);
+        ImageIcon verticeSottogruppo = new ImageIcon("Risorse/verticeSottogruppo.png");
+        bottoneAggiungiVerticeSottogruppo = new JButton(verticeSottogruppo);
+        frame.getContentPane().add(bottoneAggiungiVerticeSottogruppo);
+        bottoneAggiungiVerticeSottogruppo.addActionListener(new ActionListener() {
+                        
+            public void actionPerformed(ActionEvent e) {
+            	PopUpAggiungiVerticeSottogruppo addb = new PopUpAggiungiVerticeSottogruppo();
+            }
+        });
+        panel_dx.add(bottoneAggiungiVerticeSottogruppo);
+        
+        ImageIcon arco = new ImageIcon("Risorse/arco.png");
+        bottoneAggiungiArco = new JButton(arco);
+        frame.getContentPane().add(bottoneAggiungiArco);
+        bottoneAggiungiArco.addActionListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e) {
+            	PopUpAggiungiArco arco = new PopUpAggiungiArco();
+            	
+            }
+        });
+        panel_dx.add(bottoneAggiungiArco);
+        
+        ImageIcon arcoIndotto = new ImageIcon("Risorse/arcoIndotto.png");
+        bottoneAggiungiArcoIndotto = new JButton(arcoIndotto);
+        frame.getContentPane().add(bottoneAggiungiArcoIndotto);
+        bottoneAggiungiArcoIndotto.addActionListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e) {
+            	PopUpAggiungiArcoIndotto arcoi = new PopUpAggiungiArcoIndotto();
+            	
+            }
+        });
+        panel_dx.add(bottoneAggiungiArcoIndotto);
+        
+        ImageIcon cancella = new ImageIcon("Risorse/cancella.png");
+        bottoneElimina = new JButton(cancella);
+        frame.getContentPane().add(bottoneElimina);
+        bottoneElimina.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				graph.getModel().remove(cell);
+				
+			}
+		});
+        panel_dx.add(bottoneElimina);
+        
+        ImageIcon zoomPiu = new ImageIcon("Risorse/zoomPiu.png");
+        bottoneZoomIn = new JButton(zoomPiu);
+        frame.getContentPane().add(bottoneZoomIn);
+        bottoneZoomIn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				graphComponent.zoomIn();
+				
+			}
+		});
+        panel_dx.add(bottoneZoomIn);
+        
+        ImageIcon zoomMeno = new ImageIcon("Risorse/zoomMeno.png");
+        bottoneZoomOut = new JButton(zoomMeno);
+        frame.getContentPane().add(bottoneZoomOut);
+        bottoneZoomOut.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				graphComponent.zoomOut();
+				
+			}
+		});
+        panel_dx.add(bottoneZoomOut);
+        
+        graphComponent.getGraphControl().addMouseListener(new MouseAdapter()
+		{		
+			public void mouseReleased(MouseEvent e)
+			{
+				cell = graphComponent.getCellAt(e.getX(), e.getY());
+				if (e.isMetaDown())
+				{
+					//System.out.println( "Tasto Destro premuto" );
+					try
+					{
+						if (((mxCell)cell).isVertex()) 
+				        {
+				        	//System.out.println("Vertice");
+				        	MenuDestroVertice menuv = new MenuDestroVertice();
+					        menuv.show(e.getComponent(), e.getX(), e.getY());			        	
+						}
+						else if(((mxCell)cell).isEdge())
+						{
+							//System.out.println("Edge");
+							MenuDestroArco menua = new MenuDestroArco();
+					        menua.show(e.getComponent(), e.getX(), e.getY());
+						}
+					}
+					catch(Exception exc)
+					{
+						;
+					}
+			        
+				}
+				
+			}
+		});
+        
+        panel_dx.add(graphComponent);
+        
+        
+        panel_dx.setSize((frame.getWidth())*2/3, frame.getHeight());
+        frame.getContentPane().add(panel_dx, BorderLayout.CENTER);       
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+	}
+    
+    public static void main(String[] args) {
+        
+    	frame = new Finestra();
+    	frame.panelSx();
+    	frame.panelDx();
+        frame.setVisible(true);
     }
 }

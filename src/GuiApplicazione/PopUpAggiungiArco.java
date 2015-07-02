@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-public class PopUpAggiungiArco extends Azioni {
+public class PopUpAggiungiArco extends Finestra {
 	
 	PopUpAggiungiArco(){
 		Object parent = this.getGraph().getDefaultParent();

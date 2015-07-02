@@ -1,7 +1,7 @@
 package GuiApplicazione;
 import javax.swing.*;
 
-public class PopUpAggiungiVertice extends Azioni {
+public class PopUpAggiungiVertice extends Finestra {
 	
 	PopUpAggiungiVertice()
 	{

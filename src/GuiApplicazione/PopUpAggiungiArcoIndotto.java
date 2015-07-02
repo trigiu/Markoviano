@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-public class PopUpAggiungiArcoIndotto extends Azioni {
+public class PopUpAggiungiArcoIndotto extends Finestra {
 	
 	PopUpAggiungiArcoIndotto(){
 		       
