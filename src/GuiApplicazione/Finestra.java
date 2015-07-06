@@ -166,7 +166,7 @@ public class Finestra extends JFrame {
 		graphComponent = new mxGraphComponent(graph);
 		graphComponent.setConnectable(false);
 		graphComponent.getGraphHandler().setRemoveCellsFromParent(false);
-		graphComponent.setPreferredSize(new Dimension(870, 580));
+		graphComponent.setPreferredSize(new Dimension(frame.getWidth()*2/3,frame.getHeight()));
 		
         panel_dx.setLayout(new FlowLayout(FlowLayout.LEFT));
         
