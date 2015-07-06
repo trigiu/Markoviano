@@ -21,11 +21,32 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+
+
+final class Pannello extends JPanel {
+	
+    public Dimension getPreferredSize() {
+        Dimension d = super.getPreferredSize();
+        Container c = getParent();
+        if (c != null) {
+            d = c.getSize();
+        } else {
+            return new Dimension(10, 10);
+        }
+        int w = (int) d.getWidth();
+        int h = (int) d.getHeight();
+        //int s = (w < h ? w : h);
+        return new Dimension(w/3, h);
+    }	
+	
+}
+
 
 public class Finestra extends JFrame {
 	
@@ -61,6 +82,7 @@ public class Finestra extends JFrame {
 		
 		larghezzaFrame = (int) (dimensioniSchermo.getWidth());
 		altezzaFrame = (int) (dimensioniSchermo.getHeight());
+
         
         setSize(larghezzaFrame, altezzaFrame);
          
@@ -120,12 +142,21 @@ public class Finestra extends JFrame {
     
     private void panelSx()
     {
-    	JPanel panel_sx = new JPanel();
+        Pannello panel_sx = new Pannello();       
         panel_sx.setSize((frame.getWidth())/3, frame.getHeight());
         panel_sx.setBackground(Color.BLUE);
         Dimension dim = new Dimension(frame.getWidth()/3,frame.getHeight());
         panel_sx.setPreferredSize(dim);
-        frame.getContentPane().add(panel_sx, BorderLayout.WEST);
+        
+    	//Pannello panel_sx = new Pannello();
+        //panel_sx.setSize((frame.getWidth())/3, frame.getHeight());
+        //panel_sx.setBackground(Color.BLUE);
+        //Dimension dim = new Dimension(frame.getWidth()/3,frame.getHeight());
+        //panel_sx.setPreferredSize(dim);
+        
+        //frame.getContentPane().add(panel_sx, BorderLayout.WEST);
+        frame.add(panel_sx, BorderLayout.WEST);
+        
     }
     
     void panelDx() {
@@ -270,7 +301,17 @@ public class Finestra extends JFrame {
     public static void main(String[] args) {
         
     	frame = new Finestra();
-    	frame.panelSx();
+
+    	
+    	JPanel panel_sx = new Pannello();
+        
+        panel_sx.setSize((frame.getWidth())/3, frame.getHeight());
+        panel_sx.setBackground(Color.BLUE);
+        Dimension dim = new Dimension(frame.getWidth()/3,frame.getHeight());
+        panel_sx.setPreferredSize(dim);
+        
+        frame.getContentPane().add(panel_sx, BorderLayout.WEST);
+    	//frame.panelSx();
     	frame.panelDx();
         frame.setVisible(true);
     }
