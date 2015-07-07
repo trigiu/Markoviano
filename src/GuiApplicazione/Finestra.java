@@ -4,12 +4,14 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.ButtonGroup;
 import javax.swing.JMenuBar;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -20,7 +22,6 @@ import javax.swing.JFrame;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
-
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,6 +44,7 @@ final class Pannello extends JPanel {
         int h = (int) d.getHeight();
         //int s = (w < h ? w : h);
         return new Dimension(w/3, h);
+        
     }	
 	
 }
@@ -50,6 +52,7 @@ final class Pannello extends JPanel {
 
 public class Finestra extends JFrame {
 	
+	private static final String String = null;
 	static Finestra frame;
 	protected static mxGraph graph = new mxGraph();
 	protected static HashMap m = new HashMap();
@@ -61,6 +64,9 @@ public class Finestra extends JFrame {
 	private static JButton bottoneAggiungiArcoIndotto;
 	private static JButton bottoneZoomIn;
 	private static JButton bottoneZoomOut;
+	private static JLabel ID = new JLabel("ID");
+    
+	private static JTextField textId = new JTextField();
 	protected static Object cell;
 	private int larghezzaFrame, altezzaFrame;
 	
@@ -73,9 +79,7 @@ public class Finestra extends JFrame {
 	}
      
     public Finestra() {
-
-         
-        setTitle("Catene di Markov");
+       setTitle("Catene di Markov");
         
         Toolkit mioToolkit = Toolkit.getDefaultToolkit();
 		Dimension dimensioniSchermo = mioToolkit.getScreenSize();
@@ -83,7 +87,6 @@ public class Finestra extends JFrame {
 		larghezzaFrame = (int) (dimensioniSchermo.getWidth());
 		altezzaFrame = (int) (dimensioniSchermo.getHeight());
 
-        
         setSize(larghezzaFrame, altezzaFrame);
          
         // Creates a menubar for a JFrame
@@ -138,16 +141,22 @@ public class Finestra extends JFrame {
                 System.out.println("You have clicked on the new action");
             }
         });
-    }
+    } 
     
-    private void panelSx()
-    {
-        Pannello panel_sx = new Pannello();       
+	private void panelSx()
+    {    	
+    	Pannello panel_sx = new Pannello();
         panel_sx.setSize((frame.getWidth())/3, frame.getHeight());
         panel_sx.setBackground(Color.BLUE);
         Dimension dim = new Dimension(frame.getWidth()/3,frame.getHeight());
         panel_sx.setPreferredSize(dim);
         
+        Label ID = new Label ("ID");
+        ID.setForeground(Color.WHITE);
+        ID.setFont(new Font("sansserif",Font.BOLD,25));
+        panel_sx.add(ID);
+        textId.setPreferredSize( new Dimension( 200, 24 ) );
+        panel_sx.add(textId);
     	//Pannello panel_sx = new Pannello();
         //panel_sx.setSize((frame.getWidth())/3, frame.getHeight());
         //panel_sx.setBackground(Color.BLUE);
@@ -166,8 +175,8 @@ public class Finestra extends JFrame {
 		graphComponent = new mxGraphComponent(graph);
 		graphComponent.setConnectable(false);
 		graphComponent.getGraphHandler().setRemoveCellsFromParent(false);
-		graphComponent.setPreferredSize(new Dimension(frame.getWidth()*2/3,frame.getHeight()));
-		
+        graphComponent.setPreferredSize(new Dimension(frame.getWidth()*2/3,frame.getHeight()));
+
         panel_dx.setLayout(new FlowLayout(FlowLayout.LEFT));
         
         ImageIcon vertice = new ImageIcon("Risorse/vertice.png");
@@ -258,11 +267,14 @@ public class Finestra extends JFrame {
         
         graphComponent.getGraphControl().addMouseListener(new MouseAdapter()
 		{		
+        	
 			public void mouseReleased(MouseEvent e)
 			{
+				
 				cell = graphComponent.getCellAt(e.getX(), e.getY());
 				if (e.isMetaDown())
 				{
+					System.out.println("123");
 					//System.out.println( "Tasto Destro premuto" );
 					try
 					{
@@ -270,7 +282,8 @@ public class Finestra extends JFrame {
 				        {
 				        	//System.out.println("Vertice");
 				        	MenuDestroVertice menuv = new MenuDestroVertice();
-					        menuv.show(e.getComponent(), e.getX(), e.getY());			        	
+					        menuv.show(e.getComponent(), e.getX(), e.getY());
+					        
 						}
 						else if(((mxCell)cell).isEdge())
 						{
@@ -285,6 +298,15 @@ public class Finestra extends JFrame {
 					}
 			        
 				}
+				else {
+					if (((mxCell)cell).isVertex() || ((mxCell)cell).isEdge())
+						textId.setText(((mxCell) cell).getId().toString());
+					
+					
+					
+					
+				}
+			
 				
 			}
 		});
@@ -301,17 +323,15 @@ public class Finestra extends JFrame {
     public static void main(String[] args) {
         
     	frame = new Finestra();
-
-    	
-    	JPanel panel_sx = new Pannello();
+    	/*JPanel panel_sx = new Pannello();
         
         panel_sx.setSize((frame.getWidth())/3, frame.getHeight());
         panel_sx.setBackground(Color.BLUE);
         Dimension dim = new Dimension(frame.getWidth()/3,frame.getHeight());
-        panel_sx.setPreferredSize(dim);
+        panel_sx.setPreferredSize(dim);*/
         
-        frame.getContentPane().add(panel_sx, BorderLayout.WEST);
-    	//frame.panelSx();
+        //frame.getContentPane().add(panel_sx, BorderLayout.WEST);
+    	frame.panelSx();
     	frame.panelDx();
         frame.setVisible(true);
     }
