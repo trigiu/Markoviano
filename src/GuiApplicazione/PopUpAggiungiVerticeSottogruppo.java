@@ -19,7 +19,7 @@ public class PopUpAggiungiVerticeSottogruppo extends Finestra {
 	      myPanel.add(new JLabel("Sottogruppo:"));
 	      myPanel.add(parentOf);
 
-	      int result = JOptionPane.showConfirmDialog(null, myPanel, "Inserisci le propriet‡", JOptionPane.OK_CANCEL_OPTION);
+	      int result = JOptionPane.showConfirmDialog(null, myPanel, "Inserisci le propriet√†", JOptionPane.OK_CANCEL_OPTION);
 	      if (result == JOptionPane.OK_OPTION) {
 	    	  this.getGraph().getModel().beginUpdate();
 	    	  Object parent = this.getGraph().getDefaultParent();

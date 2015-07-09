@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 
 final class Pannello extends JPanel {
@@ -69,6 +70,8 @@ public class Finestra extends JFrame {
 	private static JTextField textId = new JTextField();
 	protected static Object cell;
 	private int larghezzaFrame, altezzaFrame;
+	
+	private ArrayList listaAgenti = new ArrayList();
 	
 	public static HashMap getM() {
 		return m;
@@ -186,6 +189,7 @@ public class Finestra extends JFrame {
                         
             public void actionPerformed(ActionEvent e) {
             	PopUpAggiungiVertice add = new PopUpAggiungiVertice();
+            	listaAgenti.add(add.oggettoAgente);
             }
         });
         panel_dx.add(bottoneAggiungiVertice);
