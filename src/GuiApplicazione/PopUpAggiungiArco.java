@@ -34,7 +34,7 @@ public class PopUpAggiungiArco extends Finestra {
 	    myPanel.add(new JLabel("Nome Arco:"));
 	    myPanel.add(nomeArco);
 
-	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Inserisci le proprietà", JOptionPane.OK_CANCEL_OPTION);
+	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Transizione", JOptionPane.OK_CANCEL_OPTION);
 	    if (result == JOptionPane.OK_OPTION) {
 	    	Object v1 = this.getM().get(verticeSorgente.getText());
 	    	Object v2 = this.getM().get(verticeDestinatario.getText());
